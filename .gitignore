@@ -205,3 +205,19 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Fire Detection System specific
+runs/
+output/
+logs/
+weights/
+checkpoints/
+*.pt
+*.pth
+*.onnx
+*.trt
+*.engine
+data/
+datasets/
+!configs/
+tensorboard_logs/
