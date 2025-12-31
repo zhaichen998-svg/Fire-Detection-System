@@ -1,0 +1,75 @@
+# Improved Fire Detection Model V1 - Data Augmentation Strategy
+
+experiment_name: improved_v1_data_augmentation
+
+# Model configuration
+model:
+  type: improved
+  version: v1
+  num_classes: 2  # flame and smoke
+  size: n  # nano
+  pretrained: true
+  img_size: 640
+  conf_threshold: 0.25
+  iou_threshold: 0.45
+
+# Data configuration
+data:
+  class_names: ['flame', 'smoke']
+  train_img_dir: data/train/images
+  train_label_dir: data/train/labels
+  val_img_dir: data/val/images
+  val_label_dir: data/val/labels
+  test_img_dir: data/test/images
+  test_label_dir: data/test/labels
+  num_workers: 4
+
+# Training configuration
+training:
+  epochs: 150
+  batch_size: 16
+  lr: 0.01
+  min_lr: 0.000001
+  weight_decay: 0.0005
+  momentum: 0.937
+  warmup_epochs: 5
+  patience: 50
+  save_interval: 10
+  log_interval: 10
+
+# Enhanced augmentation configuration
+augmentation:
+  mode: strong
+  hsv_h: 0.02
+  hsv_s: 0.8
+  hsv_v: 0.5
+  degrees: 10.0
+  translate: 0.2
+  scale: 0.8
+  shear: 2.0
+  perspective: 0.001
+  flipud: 0.0
+  fliplr: 0.5
+  mosaic: 1.0
+  mixup: 0.15
+  cutmix: 0.15
+  adaptive: true
+
+# Loss configuration
+loss:
+  cls_loss_weight: 1.0
+  box_loss_weight: 5.0
+  obj_loss_weight: 1.0
+  use_focal: false
+  use_giou: true
+
+# Optimizer configuration
+optimizer:
+  type: adamw
+  betas: [0.9, 0.999]
+  eps: 0.00000001
+
+# Scheduler configuration
+scheduler:
+  type: cosine
+  warmup_steps: 1500
