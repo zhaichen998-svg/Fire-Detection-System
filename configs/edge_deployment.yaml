@@ -1,0 +1,91 @@
+# Edge Deployment Configuration - Optimized for Edge Devices
+
+experiment_name: edge_deployment
+
+# Model configuration
+model:
+  type: improved
+  version: v5  # Lightweight version
+  num_classes: 2  # flame and smoke
+  size: n  # nano for edge devices
+  pretrained: true
+  img_size: 416  # Smaller size for faster inference
+  conf_threshold: 0.30
+  iou_threshold: 0.50
+
+# Data configuration
+data:
+  class_names: ['flame', 'smoke']
+  train_img_dir: data/train/images
+  train_label_dir: data/train/labels
+  val_img_dir: data/val/images
+  val_label_dir: data/val/labels
+  test_img_dir: data/test/images
+  test_label_dir: data/test/labels
+  num_workers: 2  # Reduced for edge devices
+
+# Training configuration
+training:
+  epochs: 100
+  batch_size: 8  # Smaller batch for limited memory
+  lr: 0.005
+  min_lr: 0.000001
+  weight_decay: 0.0005
+  momentum: 0.937
+  warmup_epochs: 3
+  patience: 40
+  save_interval: 10
+  log_interval: 10
+
+# Light augmentation for edge
+augmentation:
+  mode: light
+  hsv_h: 0.01
+  hsv_s: 0.5
+  hsv_v: 0.3
+  degrees: 0.0
+  translate: 0.05
+  scale: 0.3
+  shear: 0.0
+  perspective: 0.0
+  flipud: 0.0
+  fliplr: 0.5
+  mosaic: 0.5
+  mixup: 0.0
+
+# Loss configuration
+loss:
+  cls_loss_weight: 1.0
+  box_loss_weight: 5.0
+  obj_loss_weight: 1.0
+  use_focal: false
+  use_giou: true
+
+# Optimizer configuration
+optimizer:
+  type: adamw
+  betas: [0.9, 0.999]
+  eps: 0.00000001
+
+# Scheduler configuration
+scheduler:
+  type: cosine
+  warmup_steps: 500
+
+# Edge-specific configuration
+edge:
+  target_device: jetson_nano
+  quantization:
+    enabled: true
+    mode: int8
+    calibration_samples: 100
+  pruning:
+    enabled: true
+    sparsity: 0.3
+  optimization:
+    use_tensorrt: true
+    use_fp16: true
+    max_batch_size: 4
+  inference:
+    max_latency_ms: 50
+    min_fps: 20
